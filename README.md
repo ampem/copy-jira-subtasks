@@ -99,9 +99,10 @@ Run the tool via Docker without installing Python locally:
 
 ```bash
 docker compose build app
-docker compose run --rm app \
-  --url https://jira.example.com \
-  --token "$JIRA_TOKEN" \
+docker compose run --rm \
+  -e JIRA_API_TOKEN="$JIRA_API_TOKEN" \
+  -e JIRA_URL=https://jira.example.com \
+  app \
   --source PROJ-123 \
   --target PROJ-456
 ```
