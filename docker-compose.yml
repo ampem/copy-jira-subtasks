@@ -19,7 +19,7 @@ services:
       context: .
     environment:
       JIRA_URL: http://mock-jira:8080
-      JIRA_TOKEN: test-token
+      JIRA_API_TOKEN: test-token
     depends_on:
       mock-jira:
         condition: service_healthy
@@ -33,7 +33,7 @@ services:
       context: .
     environment:
       JIRA_URL: http://mock-jira:8080
-      JIRA_TOKEN: test-token
+      JIRA_API_TOKEN: test-token
     volumes:
       - ./tests/run_tests.sh:/app/tests/run_tests.sh:ro
     depends_on:

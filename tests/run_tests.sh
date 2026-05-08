@@ -5,7 +5,7 @@
 set -euo pipefail
 
 JIRA_URL="${JIRA_URL:-http://mock-jira:8080}"
-TOKEN="${JIRA_TOKEN:-test-token}"
+TOKEN="${JIRA_API_TOKEN:-test-token}"
 PASS=0
 FAIL=0
 

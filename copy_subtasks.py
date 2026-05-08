@@ -197,7 +197,7 @@ def parse_args() -> argparse.Namespace:
         epilog="""
 Environment variables:
   JIRA_URL    Jira base URL (overridden by --url)
-  JIRA_TOKEN  Personal Access Token (overridden by --token)
+  JIRA_API_TOKEN  Personal Access Token (overridden by --token)
 
 Examples:
   copy_subtasks.py --url https://jira.example.com --token $PAT --source PROJ-1 --target PROJ-2
@@ -207,7 +207,7 @@ Examples:
     )
     parser.add_argument("--url", default=os.environ.get("JIRA_URL"),
                         help="Jira base URL, e.g. https://jira.example.com")
-    parser.add_argument("--token", default=os.environ.get("JIRA_TOKEN"),
+    parser.add_argument("--token", default=os.environ.get("JIRA_API_TOKEN"),
                         help="Personal Access Token")
     parser.add_argument("--source", required=True, metavar="ISSUE_KEY",
                         help="Source issue key (e.g. PROJ-123)")

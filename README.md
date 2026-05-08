@@ -22,7 +22,7 @@ Credentials can also be supplied via environment variables:
 | Variable     | Description              |
 |--------------|--------------------------|
 | `JIRA_URL`   | Jira base URL            |
-| `JIRA_TOKEN` | Personal Access Token    |
+| `JIRA_API_TOKEN` | Personal Access Token |
 
 ### Options
 
@@ -60,15 +60,28 @@ python copy_subtasks.py --source PROJ-1 --target PROJ-2 \
 
 ## Jira PAT Scopes
 
-When creating a Personal Access Token in Jira (Server/Data Center), no granular OAuth scopes are selected — the token inherits your user account's permissions. The Jira **user account** must have:
+### Jira Server / Data Center (PAT — Bearer token)
 
-| Permission                 | Why it is needed                                                |
-|----------------------------|-----------------------------------------------------------------|
-| **Browse Projects**        | Read the source issue and its subtasks (`GET /rest/api/2/issue/{key}`) |
-| **Create Issues**          | Create new subtasks under the target issue (`POST /rest/api/2/issue`) |
+PATs on Jira Server/Data Center inherit your user account's project permissions; there are no granular OAuth scopes to select. The account must have the following **project-level permissions** on both the source and target projects:
+
+| Project permission             | Why it is needed                                                        |
+|--------------------------------|-------------------------------------------------------------------------|
+| **Browse Projects**            | Read the source issue and its subtask list (`GET /rest/api/2/issue/{key}`) |
+| **Create Issues**              | Create new subtasks under the target issue (`POST /rest/api/2/issue`)  |
 | **Assign Issues** *(optional)* | Required only when using `--copy-assignee` and assigning to other users |
 
-> **Jira Cloud note:** If using Jira Cloud with an API token (Basic Auth), the token owner must have the same project-level permissions listed above. Cloud does not use the PAT Bearer header — use Basic Auth with your email and API token instead.
+### Jira Cloud (API token — Basic Auth)
+
+Jira Cloud does not accept PAT Bearer tokens. Use Basic Auth with your Atlassian account email and an API token generated at `id.atlassian.com`. When authorising an OAuth 2.0 app, request the following granular scopes:
+
+| Scope                   | Required | Why it is needed                                         |
+|-------------------------|----------|----------------------------------------------------------|
+| `read:issue:jira`       | Yes      | Read the source issue, its subtask list, descriptions, and priorities |
+| `read:project:jira`     | Yes      | Resolve the project key from the target issue            |
+| `write:issue:jira`      | Yes      | Create new subtasks (`POST /rest/api/2/issue`)           |
+| `read:user:jira`        | Optional | Read assignee display names when using `--copy-assignee` |
+
+> The classic equivalents are `read:jira-work`, `write:jira-work`, and (for assignees) `read:jira-user`, if your app does not support granular scopes.
 
 ## Running Tests
 
