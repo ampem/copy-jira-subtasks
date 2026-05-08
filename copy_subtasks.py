@@ -16,23 +16,31 @@ from requests.auth import HTTPBasicAuth
 class JiraClient:
     base_url: str
     token: str
+    email: Optional[str] = None
+
+    def _auth(self):
+        if self.email:
+            return HTTPBasicAuth(self.email, self.token)
+        return None
 
     def _headers(self) -> dict:
-        return {
-            "Authorization": f"Bearer {self.token}",
+        headers = {
             "Content-Type": "application/json",
             "Accept": "application/json",
         }
+        if not self.email:
+            headers["Authorization"] = f"Bearer {self.token}"
+        return headers
 
     def get_issue(self, key: str) -> dict:
         url = f"{self.base_url}/rest/api/2/issue/{key}"
-        resp = requests.get(url, headers=self._headers())
+        resp = requests.get(url, headers=self._headers(), auth=self._auth())
         resp.raise_for_status()
         return resp.json()
 
     def create_issue(self, payload: dict) -> dict:
         url = f"{self.base_url}/rest/api/2/issue"
-        resp = requests.post(url, headers=self._headers(), json=payload)
+        resp = requests.post(url, headers=self._headers(), auth=self._auth(), json=payload)
         resp.raise_for_status()
         return resp.json()
 
@@ -196,19 +204,27 @@ def parse_args() -> argparse.Namespace:
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Environment variables:
-  JIRA_URL    Jira base URL (overridden by --url)
-  JIRA_API_TOKEN  Personal Access Token (overridden by --token)
+  JIRA_URL        Jira base URL (overridden by --url)
+  JIRA_API_TOKEN  API token (overridden by --token)
+  JIRA_EMAIL      Atlassian account email for Jira Cloud Basic Auth (overridden by --email)
 
 Examples:
-  copy_subtasks.py --url https://jira.example.com --token $PAT --source PROJ-1 --target PROJ-2
+  # Jira Server / Data Center (Bearer token):
+  copy_subtasks.py --url https://jira.example.com --token $JIRA_API_TOKEN --source PROJ-1 --target PROJ-2
+
+  # Jira Cloud (Basic Auth):
+  copy_subtasks.py --url https://your-domain.atlassian.net --email user@example.com --token $JIRA_API_TOKEN --source PROJ-1 --target PROJ-2
+
   copy_subtasks.py --source PROJ-1 --target PROJ-2 --filter-include "backend"
   copy_subtasks.py --source PROJ-1 --target PROJ-2 --filter-exclude "frontend|design"
 """,
     )
     parser.add_argument("--url", default=os.environ.get("JIRA_URL"),
                         help="Jira base URL, e.g. https://jira.example.com")
+    parser.add_argument("--email", default=os.environ.get("JIRA_EMAIL"),
+                        help="Atlassian account email (Jira Cloud Basic Auth)")
     parser.add_argument("--token", default=os.environ.get("JIRA_API_TOKEN"),
-                        help="Personal Access Token")
+                        help="API token (Bearer for Server/DC, Basic Auth for Cloud)")
     parser.add_argument("--source", required=True, metavar="ISSUE_KEY",
                         help="Source issue key (e.g. PROJ-123)")
     parser.add_argument("--target", required=True, metavar="ISSUE_KEY",
@@ -237,10 +253,10 @@ def main() -> int:
         print("Error: Jira URL required (--url or JIRA_URL env var)", file=sys.stderr)
         return 1
     if not args.token:
-        print("Error: PAT required (--token or JIRA_TOKEN env var)", file=sys.stderr)
+        print("Error: API token required (--token or JIRA_API_TOKEN env var)", file=sys.stderr)
         return 1
 
-    client = JiraClient(base_url=args.url.rstrip("/"), token=args.token)
+    client = JiraClient(base_url=args.url.rstrip("/"), token=args.token, email=args.email)
 
     print(f"Fetching subtasks from {args.source}...")
     try:

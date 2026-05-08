@@ -5,29 +5,43 @@ A CLI tool that copies subtasks from one Jira issue to another. Useful for dupli
 ## Requirements
 
 - Docker and Docker Compose
-- A Jira Personal Access Token (PAT)
+- A Jira API token
+- For Jira Cloud: your Atlassian account email
 
 ## Usage
 
+**Jira Server / Data Center** (Bearer token):
 ```
 python copy_subtasks.py \
   --url https://jira.example.com \
-  --token <PAT> \
+  --token <API_TOKEN> \
+  --source PROJ-123 \
+  --target PROJ-456
+```
+
+**Jira Cloud** (Basic Auth):
+```
+python copy_subtasks.py \
+  --url https://your-domain.atlassian.net \
+  --email your@email.com \
+  --token <API_TOKEN> \
   --source PROJ-123 \
   --target PROJ-456
 ```
 
 Credentials can also be supplied via environment variables:
 
-| Variable     | Description              |
-|--------------|--------------------------|
-| `JIRA_URL`   | Jira base URL            |
-| `JIRA_API_TOKEN` | Personal Access Token |
+| Variable         | Description                                        |
+|------------------|----------------------------------------------------|
+| `JIRA_URL`       | Jira base URL                                      |
+| `JIRA_API_TOKEN` | API token                                          |
+| `JIRA_EMAIL`     | Atlassian account email (Jira Cloud only)          |
 
 ### Options
 
 | Flag                    | Description                                                    |
 |-------------------------|----------------------------------------------------------------|
+| `--email EMAIL`         | Atlassian account email for Jira Cloud Basic Auth              |
 | `--source ISSUE_KEY`    | Source issue to copy subtasks from (required)                  |
 | `--target ISSUE_KEY`    | Target issue to create subtasks under (required)               |
 | `--filter-include REGEX`| Only copy subtasks whose summary matches this regex            |
@@ -100,8 +114,9 @@ Run the tool via Docker without installing Python locally:
 ```bash
 docker compose build app
 docker compose run --rm \
+  -e JIRA_URL=https://your-domain.atlassian.net \
+  -e JIRA_EMAIL="$JIRA_EMAIL" \
   -e JIRA_API_TOKEN="$JIRA_API_TOKEN" \
-  -e JIRA_URL=https://jira.example.com \
   app \
   --source PROJ-123 \
   --target PROJ-456
