@@ -1,0 +1,14 @@
+{
+  "key": "PROJ-14",
+  "id": "10014",
+  "fields": {
+    "summary": "Write unit tests (FAIL this one)",
+    "status": {"name": "To Do"},
+    "issuetype": {"name": "Sub-task"},
+    "project": {"key": "PROJ"},
+    "description": "This subtask is deliberately named to trigger a simulated failure in the mock.",
+    "priority": {"name": "Low"},
+    "assignee": null,
+    "subtasks": []
+  }
+}

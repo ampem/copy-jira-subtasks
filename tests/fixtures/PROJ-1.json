@@ -1,0 +1,47 @@
+{
+  "key": "PROJ-1",
+  "id": "10001",
+  "fields": {
+    "summary": "Source epic",
+    "status": {"name": "In Progress"},
+    "issuetype": {"name": "Story"},
+    "project": {"key": "PROJ"},
+    "subtasks": [
+      {
+        "key": "PROJ-10",
+        "fields": {
+          "summary": "Backend: set up database schema",
+          "status": {"name": "Done"}
+        }
+      },
+      {
+        "key": "PROJ-11",
+        "fields": {
+          "summary": "Backend: write REST endpoints",
+          "status": {"name": "In Progress"}
+        }
+      },
+      {
+        "key": "PROJ-12",
+        "fields": {
+          "summary": "Frontend: build login page",
+          "status": {"name": "To Do"}
+        }
+      },
+      {
+        "key": "PROJ-13",
+        "fields": {
+          "summary": "Frontend: build dashboard",
+          "status": {"name": "To Do"}
+        }
+      },
+      {
+        "key": "PROJ-14",
+        "fields": {
+          "summary": "Write unit tests (FAIL this one)",
+          "status": {"name": "To Do"}
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "key": "PROJ-10",
+  "id": "10010",
+  "fields": {
+    "summary": "Backend: set up database schema",
+    "status": {"name": "Done"},
+    "issuetype": {"name": "Sub-task"},
+    "project": {"key": "PROJ"},
+    "description": "Create the initial schema migrations for users and sessions tables.",
+    "priority": {"name": "High"},
+    "assignee": {"displayName": "Alice Smith"},
+    "subtasks": []
+  }
+}

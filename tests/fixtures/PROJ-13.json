@@ -1,0 +1,14 @@
+{
+  "key": "PROJ-13",
+  "id": "10013",
+  "fields": {
+    "summary": "Frontend: build dashboard",
+    "status": {"name": "To Do"},
+    "issuetype": {"name": "Sub-task"},
+    "project": {"key": "PROJ"},
+    "description": "Build the main analytics dashboard view.",
+    "priority": {"name": "Medium"},
+    "assignee": null,
+    "subtasks": []
+  }
+}

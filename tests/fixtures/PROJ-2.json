@@ -1,0 +1,11 @@
+{
+  "key": "PROJ-2",
+  "id": "10002",
+  "fields": {
+    "summary": "Target epic",
+    "status": {"name": "To Do"},
+    "issuetype": {"name": "Story"},
+    "project": {"key": "PROJ"},
+    "subtasks": []
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "key": "PROJ-12",
+  "id": "10012",
+  "fields": {
+    "summary": "Frontend: build login page",
+    "status": {"name": "To Do"},
+    "issuetype": {"name": "Sub-task"},
+    "project": {"key": "PROJ"},
+    "description": null,
+    "priority": {"name": "Medium"},
+    "assignee": null,
+    "subtasks": []
+  }
+}

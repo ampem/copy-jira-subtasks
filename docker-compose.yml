@@ -1,0 +1,44 @@
+services:
+
+  mock-jira:
+    build:
+      context: tests/mock_jira
+    volumes:
+      - ./tests/fixtures:/fixtures:ro
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "python3", "-c",
+             "import urllib.request; urllib.request.urlopen('http://localhost:8080/admin/created')"]
+      interval: 2s
+      timeout: 3s
+      retries: 10
+
+  app:
+    build:
+      context: .
+    environment:
+      JIRA_URL: http://mock-jira:8080
+      JIRA_TOKEN: test-token
+    depends_on:
+      mock-jira:
+        condition: service_healthy
+    # Override entrypoint so the container can also run the test suite
+    entrypoint: []
+    command: ["python", "copy_subtasks.py", "--help"]
+    working_dir: /app
+
+  test:
+    build:
+      context: .
+    environment:
+      JIRA_URL: http://mock-jira:8080
+      JIRA_TOKEN: test-token
+    volumes:
+      - ./tests/run_tests.sh:/app/tests/run_tests.sh:ro
+    depends_on:
+      mock-jira:
+        condition: service_healthy
+    entrypoint: []
+    command: ["bash", "tests/run_tests.sh"]
+    working_dir: /app

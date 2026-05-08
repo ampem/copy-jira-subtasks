@@ -1,0 +1,14 @@
+{
+  "key": "PROJ-11",
+  "id": "10011",
+  "fields": {
+    "summary": "Backend: write REST endpoints",
+    "status": {"name": "In Progress"},
+    "issuetype": {"name": "Sub-task"},
+    "project": {"key": "PROJ"},
+    "description": "Implement CRUD endpoints for the user resource.",
+    "priority": {"name": "High"},
+    "assignee": {"displayName": "Bob Jones"},
+    "subtasks": []
+  }
+}
